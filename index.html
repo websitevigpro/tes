@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vigara Production</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #1E40AF;
+  --secondary: #3B82F6;
+  --success: #16A34A;
+  --danger: #DC2626;
+  --bg: #f9fafb;
+  --text: #0f172a;
+  --radius: 12px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  user-select: none;
+}
+
+.header {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.logout-btn {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--danger);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+  display: none;
+}
+.logout-btn:hover {
+  background: #b91c1c;
+}
+
+.container {
+  width: 90%;
+  max-width: 850px;
+  background: #fff;
+  margin: 40px auto;
+  padding: 35px 25px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: fadeUp 0.6s ease;
+}
+
+h2, h3 {
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 6px 0 14px;
+  border-radius: var(--radius);
+  border: 1px solid #cbd5e1;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.25);
+  outline: none;
+}
+
+button {
+  background: var(--secondary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+}
+
+/* Navigation Buttons */
+#questionNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+#questionNav button {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #e5e7eb;
+  color: #0f172a;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  min-width: 38px;
+}
+
+#questionNav button.unanswered {
+  background: #fca5a5;
+  color: white;
+}
+
+#questionNav button:hover {
+  background: #d1d5db;
+  transform: scale(1.08);
+}
+
+#questionNav button.active {
+  background: var(--secondary);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(59,130,246,0.5);
+}
+
+#questionNav button.answered {
+  background: var(--success);
+  color: white;
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  height: 14px;
+  background: #e5e7eb;
+  border-radius: var(--radius);
+  margin: 15px 0 20px;
+  overflow: hidden;
+}
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), #4ade80);
+  border-radius: var(--radius);
+  transition: width 0.4s ease;
+}
+
+/* Timer */
+#timer {
+  text-align: center;
+  font-size: 22px;
+  color: var(--danger);
+  margin: 10px 0 20px;
+  font-weight: bold;
+}
+
+/* Question Box */
+.question-box {
+  margin: 20px 0;
+  padding: 22px;
+  border-radius: var(--radius);
+  background: #f8fafc;
+  border-left: 6px solid var(--secondary);
+  box-shadow: var(--shadow);
+}
+
+/* Answers */
+.answers label {
+  display: block;
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid #e5e7eb;
+  padding: 12px 14px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.answers label:hover {
+  background: #eff6ff;
+  transform: scale(1.02);
+}
+.answers input[type="radio"] { display: none; }
+.answers input[type="radio"]:checked + span {
+  background: linear-gradient(90deg, var(--secondary), var(--primary));
+  color: white;
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+}
+.answers span {
+  display: block;
+  padding: 10px;
+  border-radius: var(--radius);
+  transition: all 0.3s ease;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+.nav-buttons button {
+  flex: 1;
+  margin: 0 5px;
+}
+
+#resultText {
+  text-align: center;
+  font-size: 18px;
+  color: var(--primary);
+  margin-top: 15px;
+}
+
+/* Loader */
+.loader { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); justify-content: center; align-items: center; z-index: 999; }
+.loader div { width: 55px; height: 55px; border: 6px solid #cbd5e1; border-top: 6px solid var(--secondary); border-radius: 50%; animation: spin 1s linear infinite; }
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 25px 30px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+.modal-buttons button {
+  flex: 1;
+  margin: 0 10px;
+  font-weight: 600;
+}
+
+@keyframes fadeUp { from {opacity: 0; transform: translateY(25px);} to {opacity: 1; transform: translateY(0);} }
+@keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+
+@media (max-width:600px) {
+  .container { width:95%; padding:25px 15px; }
+  .logout-btn { top: 15px; right: 10px; transform: none; }
+  .nav-buttons button { padding:10px; font-size:14px; }
+  #questionNav { gap:6px; }
+  #questionNav button { min-width:34px; padding:8px; font-size:13px; }
+}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div></div></div>
+
+<div class="header">
+  <h1>Vigara Production - Sistem Seleksi Online</h1>
+  <button class="logout-btn" id="logoutBtn" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+  <div id="loginForm">
+    <h3>Login Anggota</h3>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="loginError"></p>
+  </div>
+
+  <div id="subjectSelection" style="display:none;">
+    <h3>Pilih Mata Pelajaran</h3>
+    <select id="subjectSelect"></select>
+    <button onclick="loadPackages()">Lanjut</button>
+  </div>
+
+  <div id="packageSelection" style="display:none;">
+    <h3>Pilih Paket Ujian</h3>
+    <select id="packageSelect"></select>
+    <button onclick="startExam()">Mulai Ujian</button>
+  </div>
+
+  <div id="examSection" style="display:none;">
+    <div id="timer"></div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div id="questionNav"></div>
+    <div id="questionBox" class="question-box"></div>
+    <div class="nav-buttons">
+      <button id="prevBtn" onclick="prevQuestion()">⬅ Sebelumnya</button>
+      <button id="nextBtn" onclick="nextQuestion()">Berikutnya ➡</button>
+    </div>
+    <div style="text-align:center; margin-top:25px;">
+      <button onclick="openModal()" style="font-weight:600;">Kirim Jawaban</button>
+    </div>
+  </div>
+
+  <div id="resultSection" style="display:none;">
+    <h3>Hasil Ujian</h3>
+    <p id="resultText"></p>
+    <div style="text-align:center;">
+      <button onclick="logout()" style="margin-top:10px;">Kembali ke Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="confirmModal">
+  <div class="modal-content">
+    <h3>Konfirmasi Pengiriman</h3>
+    <p>Apakah Anda yakin ingin mengirim jawaban? Pastikan semua sudah dijawab dengan benar.</p>
+    <div class="modal-buttons">
+      <button style="background:var(--success);" onclick="confirmSubmit()">Ya, Kirim</button>
+      <button style="background:var(--danger);" onclick="closeModal()">Batal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GS_URL = "https://script.google.com/macros/s/AKfycbxFZLYwjg3qAjW0FeugrY5eAJAd5Vgz4O90vrFSpUHAsnpVuGWpJ2vTGKFq751c22DZaw/exec";
+let currentUser=null, subjects=[], packages=[], questions=[], answers={}, currentIndex=0, timerInterval, timeLeft=0;
+
+function showLoader(s){document.getElementById('loader').style.display=s?'flex':'none';}
+
+window.onload=()=>{
+  const saved=localStorage.getItem('vigara_user');
+  if(saved){currentUser=JSON.parse(saved);loadSubjects();document.getElementById('logoutBtn').style.display='block';}
+  else document.getElementById('loginForm').style.display='block';
+};
+
+window.addEventListener("blur",()=>{if(document.getElementById('examSection').style.display==='block'){submitAnswers();alert("Ujian otomatis dikirim karena Anda meninggalkan halaman.");}});
+window.addEventListener("beforeunload",(e)=>{if(document.getElementById('examSection').style.display==='block'){submitAnswers();e.returnValue="Jawaban akan dikirim otomatis.";}});
+
+document.addEventListener('keydown',e=>{
+  if((e.key==='PrintScreen')||(e.key==='F12')||(e.ctrlKey&&e.key==='u')){alert('Tindakan ini tidak diizinkan selama ujian!');e.preventDefault();}
+});
+
+async function login(){
+  showLoader(true);
+  const u=username.value.trim(),p=password.value.trim();
+  const r=await fetch(`${GS_URL}?action=login&username=${u}&password=${p}`);
+  const d=await r.json();showLoader(false);
+  if(d.ok){currentUser=d.user;localStorage.setItem('vigara_user',JSON.stringify(currentUser));document.getElementById('logoutBtn').style.display='block';loadSubjects();}
+  else loginError.textContent=d.error;
+}
+
+function logout(){
+  localStorage.removeItem('vigara_user');
+  location.reload();
+}
+
+async function loadSubjects(){
+  loginForm.style.display='none';showLoader(true);
+  const r=await fetch(`${GS_URL}?action=get_subjects`);const d=await r.json();showLoader(false);
+  subjects=d.subjects;
+  subjectSelect.innerHTML=subjects.map(s=>`<option value="${s.subject_id}">${s.subject_name}</option>`).join('');
+  subjectSelection.style.display='block';
+}
+
+async function loadPackages(){
+  const sid=subjectSelect.value;
+  showLoader(true);
+  const r=await fetch(`${GS_URL}?action=get_packages&subject_id=${sid}`);const d=await r.json();showLoader(false);
+  packages=d.packages;
+  packageSelect.innerHTML=packages.map(p=>`<option value="${p.package_id}">${p.package_name}</option>`).join('');
+  subjectSelection.style.display='none';packageSelection.style.display='block';
+}
+
+async function startExam(){
+  const pid=packageSelect.value;
+  const pkg=packages.find(p=>p.package_id===pid);
+  showLoader(true);
+  const r=await fetch(`${GS_URL}?action=get_package_questions&package_id=${pid}`);const d=await r.json();showLoader(false);
+  questions=d.questions;answers={};currentIndex=0;
+  timeLeft=parseInt(pkg.time_minutes)*60;
+  packageSelection.style.display='none';examSection.style.display='block';
+  renderNav();renderQuestion();startTimer();updateProgress();
+}
+
+function renderNav(){
+  const nav=document.getElementById('questionNav');nav.innerHTML='';
+  questions.forEach((q,i)=>{
+    const btn=document.createElement('button');
+    btn.textContent=i+1;
+    btn.className=answers[q.qid]?'answered':'unanswered';
+    if(i===currentIndex)btn.classList.add('active');
+    btn.onclick=()=>{currentIndex=i;renderQuestion();renderNav();};
+    nav.appendChild(btn);
+  });
+  updateProgress();updateNavButtons();
+}
+
+function renderQuestion(){
+  const q=questions[currentIndex];
+  questionBox.innerHTML=`
+    <b>${currentIndex+1}. ${q.question_text}</b>
+    <div class="answers">
+      ${Object.keys(q.opts).map(k=>`
+        <label>
+          <input type="radio" name="answer" value="${k}" ${answers[q.qid]===k?'checked':''}>
+          <span>${k}. ${q.opts[k]}</span>
+        </label>`).join('')}
+    </div>`;
+  document.querySelectorAll('input[name="answer"]').forEach(r=>{r.onchange=e=>{answers[q.qid]=e.target.value;renderNav();};});
+}
+
+function prevQuestion(){if(currentIndex>0){currentIndex--;renderQuestion();renderNav();}}
+function nextQuestion(){if(currentIndex<questions.length-1){currentIndex++;renderQuestion();renderNav();}}
+function updateNavButtons(){prevBtn.disabled=currentIndex===0;nextBtn.disabled=currentIndex===questions.length-1;}
+function updateProgress(){
+  const bar=document.getElementById('progressBar');
+  const total=questions.length,answered=Object.keys(answers).length;
+  const percent=(answered/total)*100;bar.style.width=`${percent}%`;
+}
+function startTimer(){
+  const t=timer;
+  timerInterval=setInterval(()=>{
+    if(timeLeft<=0){clearInterval(timerInterval);submitAnswers();}
+    else{const m=Math.floor(timeLeft/60),s=timeLeft%60;t.textContent=`⏰ ${m}:${s.toString().padStart(2,'0')}`;timeLeft--;}
+  },1000);
+}
+
+function openModal(){confirmModal.style.display='flex';}
+function closeModal(){confirmModal.style.display='none';}
+function confirmSubmit(){closeModal();submitAnswers();}
+
+async function submitAnswers(){
+  showLoader(true);clearInterval(timerInterval);
+  const payload={username:currentUser.username,package_id:packageSelect.value,answers:Object.entries(answers).map(([qid,answer])=>({qid,answer}))};
+  const formData=new FormData();formData.append('payload',JSON.stringify(payload));
+  const r=await fetch(GS_URL,{method:'POST',body:formData});const d=await r.json();showLoader(false);
+  examSection.style.display='none';resultSection.style.display='block';
+  resultText.textContent=d.ok?`🎉 Nilai Anda: ${d.score} (${d.correct_count}/${d.max_score} benar)`:`❌ Gagal menyimpan hasil: ${d.error}`;
+}
+</script>
+</body>
+</html>
